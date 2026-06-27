@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Conference-ICoRD_'27-blue?style=for-the-badge" alt="ICoRD '27"/>
   <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" alt="Python"/>
   <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" alt="PyTorch"/>
-  <img src="https://img.shields.io/badge/ROS2-22314E?style=for-the-badge&logo=ros&logoColor=white" alt="ROS2"/>
+  <img src="https://img.shields.io/badge/Machine_Learning-22314E?style=for-the-badge&logo=ML&logoColor=white" alt="ML"/>
   <img src="https://img.shields.io/badge/LaTeX-008080?style=for-the-badge&logo=latex&logoColor=white" alt="LaTeX"/>
 </p>
 
