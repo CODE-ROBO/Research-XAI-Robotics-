@@ -1,12 +1,3 @@
-<div align="center">
-  <code>
-  [SYS_INIT]... RESEARCH_LABORATORY_ACTIVE<br>
-  [DESIGNATION]... ACADEMIC_MANUSCRIPT_ARCHIVE<br>
-  [ARCHITECTURE_TIER]... Q1_JOURNAL_STANDARD<br>
-  [STATUS]... SUBMISSION_FRAMEWORK_CONFIGURED
-  </code>
-</div>
-
 <h1 align="center">Explainable AI (XAI) Architectures for Transparent Robotic Decision-Making 🧠🤖</h1>
 <h4 align="center">Feature Attribution, System Transparency, & Robotic Control</h4>
 
