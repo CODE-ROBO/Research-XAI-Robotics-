@@ -3,7 +3,7 @@
 
 <p align="center">
   <br>
-  <img src="https://img.shields.io/badge/Conference-ICoRD_'27-blue?style=for-the-badge" 
+  <img src="https://img.shields.io/badge/Conference-ICoRD_'27-blue?style=for-the-
   <img src="https://img.shields.io/badge/Python-FFD700?style=for-the-badge&logo=python&logoColor=black" alt="Python"/>
   <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" alt="PyTorch"/>
   <img src="https://img.shields.io/badge/Machine_Learning-22314E?style=for-the-badge&logo=ML&logoColor=white" alt="ML"/>
