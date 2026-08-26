@@ -12,7 +12,6 @@
 <p align="center">
   <img src="https://via.placeholder.com/800x400/0a0a0a/FFD700?text=[INSERT+XAI+SYSTEM+ARCHITECTURE+DIAGRAM+HERE]" alt="XAI Framework Diagram" width="100%"/>
 </p>
-
 <details open>
   <summary><b>📑 DIRECTORY TERMINAL (TABLE OF CONTENTS)</b></summary>
   <ol>
