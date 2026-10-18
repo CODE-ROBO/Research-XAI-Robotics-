@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+"""
+Unit Test Suite: ISO/TS 15066 Velocity Governor & Fatigue Boundaries
+"""
+
+import unittest
+import numpy as np
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from Src.xai_telemetry_engine import XAITelemetryEngine
+
+class TestVelocityGovernor(unittest.TestCase):
+    def setUp(self):
+        self.engine = XAITelemetryEngine()
+
+    def test_nominal_separation_returns_full_scale(self):
+        # Separation > 1.5m with low fatigue
+        scale, stop_dist = self.engine.compute_velocity_scaling(d_min=1.80, fatigue_index=0.0)
+        self.assertAlmostEqual(scale, 1.000, places=2)
+        self.assertLess(stop_dist, 350.0)
+
+    def test_critical_proximity_triggers_protective_stop(self):
+        # Separation below safety bound (0.15m < 0.35m)
+        scale, stop_dist = self.engine.compute_velocity_scaling(d_min=0.15, fatigue_index=0.0)
+        self.assertLessEqual(scale, 0.20)
+
+    def test_fatigue_monotonic_velocity_reduction(self):
+        # Constant distance, increasing fatigue
+        s1, _ = self.engine.compute_velocity_scaling(d_min=0.80, fatigue_index=0.10)
+        s2, _ = self.engine.compute_velocity_scaling(d_min=0.80, fatigue_index=0.50)
+        s3, _ = self.engine.compute_velocity_scaling(d_min=0.80, fatigue_index=0.90)
+        self.assertGreater(s1, s2)
+        self.assertGreater(s2, s3)
+
+    def test_fatigue_index_clamping(self):
+        # Input parameters exceeding physiological boundaries
+        f_max = self.engine.compute_fatigue_index(perclos=1.5, posture_dev=2.0, torque_load=150.0)
+        f_min = self.engine.compute_fatigue_index(perclos=0.0, posture_dev=0.0, torque_load=0.0)
+        self.assertEqual(f_max, 1.0)
+        self.assertEqual(f_min, 0.0)
+
+if __name__ == '__main__':
+    unittest.main()
