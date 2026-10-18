@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""
+Real-Time HMI Telemetry & Explainable Alert Dispatcher
+Generates visual operator warnings and local SHAP feature breakdown.
+"""
+
+import sys
+import json
+import time
+import numpy as np
+from xai_telemetry_engine import XAITelemetryEngine
+
+class HMIAlertDispatcher:
+    def __init__(self, semantics_path="Data/xai_alert_semantics.json"):
+        self.engine = XAITelemetryEngine()
+        try:
+            with open(semantics_path, "r") as f:
+                self.semantics = json.load(f)["alert_dispatch_matrix"]
+        except FileNotFoundError:
+            self.semantics = {
+                "NOMINAL": {"hex_color": "#00FF66", "hmi_message": "Nominal tracking."},
+                "SLOWDOWN_PROXIMITY": {"hex_color": "#FFCC00", "hmi_message": "Proximity attenuation."},
+                "SLOWDOWN_FATIGUE": {"hex_color": "#FF9900", "hmi_message": "Operator fatigue buffer."},
+                "CRITICAL_BRAKE_PROXIMITY": {"hex_color": "#FF0033", "hmi_message": "Emergency protective stop."}
+            }
+
+    def dispatch_cycle(self, telemetry: np.ndarray) -> dict:
+        t0 = time.perf_counter()
+        f_idx = self.engine.compute_fatigue_index(telemetry[2], telemetry[3], telemetry[4])
+        scale, stop_dist = self.engine.compute_velocity_scaling(telemetry[0], f_idx)
+        attr = self.engine.generate_local_attribution(telemetry)
+        latency_ms = (time.perf_counter() - t0) * 1000.0
+
+        # Classify Alert Code
+        if scale <= 0.15:
+            code = "CRITICAL_BRAKE_PROXIMITY"
+        elif f_idx >= 0.45:
+            code = "SLOWDOWN_FATIGUE"
+        elif scale < 0.90:
+            code = "SLOWDOWN_PROXIMITY"
+        else:
+            code = "NOMINAL"
+
+        meta = self.semantics.get(code, self.semantics["NOMINAL"])
+        dominant_feature = min(attr, key=attr.get)
+
+        payload = {
+            "timestamp": int(time.time() * 1000),
+            "latency_ms": round(latency_ms, 3),
+            "alert_code": code,
+            "hex_color": meta["hex_color"],
+            "hmi_message": meta["hmi_message"],
+            "scaling_factor": round(scale, 4),
+            "stopping_distance_mm": round(stop_dist, 2),
+            "fatigue_index": round(f_idx, 4),
+            "dominant_attribution": dominant_feature,
+            "shap_attributions": attr
+        }
+        return payload
+
+if __name__ == "__main__":
+    hmi = HMIAlertDispatcher()
+    test_stream = [
+        np.array([1.20, 0.1, 0.10, 0.05, 2.0, 200.0, 0.1, 480.0]),
+        np.array([0.55, 0.3, 0.25, 0.15, 8.0, 600.0, 0.4, 480.0]),
+        np.array([0.30, 0.4, 0.58, 0.42, 17.5, 1400.0, 1.2, 480.0]),
+        np.array([0.18, 0.1, 0.65, 0.55, 22.0, 1800.0, 1.8, 480.0])
+    ]
+    for frame in test_stream:
+        out = hmi.dispatch_cycle(frame)
+        print(f"[{out['alert_code']}] Scale: {out['scaling_factor']} | "
+              f"Dominant Factor: {out['dominant_attribution']} | Latency: {out['latency_ms']}ms")
