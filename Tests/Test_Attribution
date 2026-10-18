@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+"""
+Unit Test Suite: Additive Feature Attribution Consistency & Attribution Rankings
+"""
+
+import unittest
+import numpy as np
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from Src.xai_telemetry_engine import XAITelemetryEngine
+from Src.hmi_alert_dashboard import HMIAlertDispatcher
+
+class TestSHAPAttributions(unittest.TestCase):
+    def setUp(self):
+        self.engine = XAITelemetryEngine()
+        self.hmi = HMIAlertDispatcher()
+
+    def test_proximity_hazard_identifies_d_min(self):
+        # Dangerous distance (0.22m) with all other parameters nominal
+        state = np.array([0.22, 0.05, 0.05, 0.05, 2.0, 100.0, 0.1, 480.0])
+        attr = self.engine.generate_local_attribution(state)
+        dominant = min(attr, key=attr.get)
+        self.assertEqual(dominant, "d_min_m")
+        self.assertLess(attr["d_min_m"], -0.40)
+
+    def test_fatigue_hazard_identifies_perclos(self):
+        # High distance (1.2m) but severe PERCLOS drowsiness (0.75)
+        state = np.array([1.20, 0.05, 0.75, 0.05, 2.0, 100.0, 0.1, 480.0])
+        attr = self.engine.generate_local_attribution(state)
+        dominant = min(attr, key=attr.get)
+        self.assertEqual(dominant, "perclos")
+
+    def test_hmi_latency_sub_5ms(self):
+        sample = np.array([0.45, 0.25, 0.35, 0.20, 12.0, 800.0, 0.5, 480.0])
+        payload = self.hmi.dispatch_cycle(sample)
+        self.assertLess(payload["latency_ms"], 5.0)
+
+if __name__ == '__main__':
+    unittest.main()
