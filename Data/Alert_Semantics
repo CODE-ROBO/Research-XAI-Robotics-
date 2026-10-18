@@ -1,0 +1,49 @@
+{
+  "ontology_standard": "ISO/TS 15066:2016 Collaborative Robotics Safety & RULA Ergonomics",
+  "feature_indices": {
+    "d_min_m": 0,
+    "v_rel_mps": 1,
+    "perclos": 2,
+    "posture_dev_rad": 3,
+    "handover_torque_nm": 4,
+    "shift_duration_s": 5,
+    "cartesian_jerk_mps3": 6,
+    "ambient_lux": 7
+  },
+  "kinematic_thresholds": {
+    "d_safety_m": 0.35,
+    "d_warning_m": 0.70,
+    "v_cobot_nominal_mps": 1.25,
+    "a_decel_max_mps2": 2.50,
+    "jerk_limit_mps3": 15.0
+  },
+  "ergonomic_thresholds": {
+    "perclos_warning": 0.35,
+    "perclos_critical": 0.60,
+    "posture_dev_warning_rad": 0.35,
+    "posture_dev_critical_rad": 0.70,
+    "handover_torque_limit_nm": 20.0
+  },
+  "alert_dispatch_matrix": {
+    "NOMINAL": {
+      "hex_color": "#00FF66",
+      "hmi_message": "Collaborative cell nominal. Standard speed profile.",
+      "audio_frequency_hz": 0
+    },
+    "SLOWDOWN_PROXIMITY": {
+      "hex_color": "#FFCC00",
+      "hmi_message": "Operator ingress detected. Attenuating velocity to maintain SSMR separation.",
+      "audio_frequency_hz": 440
+    },
+    "SLOWDOWN_FATIGUE": {
+      "hex_color": "#FF9900",
+      "hmi_message": "Elevated operator fatigue index detected. Extending task cycle buffer.",
+      "audio_frequency_hz": 660
+    },
+    "CRITICAL_BRAKE_PROXIMITY": {
+      "hex_color": "#FF0033",
+      "hmi_message": "Protective stop assertion: Minimum protective separation boundary violated.",
+      "audio_frequency_hz": 1200
+    }
+  }
+}
