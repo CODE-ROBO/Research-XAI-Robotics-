@@ -1,0 +1,45 @@
+@article{lundberg2017unified,
+  title={A unified approach to interpreting model predictions},
+  author={Lundberg, Scott M and Lee, Su-In},
+  journal={Advances in Neural Information Processing Systems},
+  volume={30},
+  pages={4765--4774},
+  year={2017}
+}
+
+@standard{iso15066,
+  title={Robots and robotic devices -- Collaborative robots},
+  organization={International Organization for Standardization},
+  number={ISO/TS 15066:2016},
+  year={2016}
+}
+
+@article{haddadin2012soft,
+  title={Soft-tissue injury in robotics: Safety assessment and safe design},
+  author={Haddadin, Sami and Albu-Schaffer, Alin and De Luca, Alessandro and Hirzinger, Gerd},
+  journal={IEEE Transactions on Robotics},
+  volume={28},
+  number={1},
+  pages={20--34},
+  year={2012}
+}
+
+@article{khatib1986real,
+  title={Real-time obstacle avoidance for manipulators and mobile robots},
+  author={Khatib, Oussama},
+  journal={The International Journal of Robotics Research},
+  volume={5},
+  number={1},
+  pages={90--98},
+  year={1986}
+}
+
+@article{mcatamney1993rula,
+  title={RULA: a survey method for the investigation of work-related upper limb disorders},
+  author={McAtamney, Lynn and Corlett, E Nigel},
+  journal={Applied Ergonomics},
+  volume={24},
+  number={2},
+  pages={91--99},
+  year={1993}
+}
